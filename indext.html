@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TE701 | Análisis de Manufactura — UNI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-dark: #0b0f17; --bg-card: #131a24; --bg-surface: #1a2330;
+            --border: #2a3544; --text-primary: #e8edf5; --text-secondary: #8fa0b5;
+            --accent-cyan: #00d4ff; --accent-amber: #ffb347; --accent-green: #3ddc84;
+            --accent-red: #ff5c5c; --font-main: 'Inter', system-ui, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace; --shadow: 0 8px 32px rgba(0,0,0,0.4);
+            --radius: 16px; --radius-sm: 10px; --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        body { font-family: var(--font-main); background: var(--bg-dark); color: var(--text-primary); line-height: 1.7; overflow-x: hidden; }
+        body::before {
+            content: ''; position: fixed; inset: 0;
+            background-image: linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+            background-size: 48px 48px; pointer-events: none; z-index: 0;
+        }
+        .main-header { position: sticky; top: 0; z-index: 100; background: rgba(11, 15, 23, 0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 0 2rem; }
+        .header-inner { max-width: 1400px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 72px; }
+        .logo-group { display: flex; align-items: center; gap: 12px; }
+        .logo-icon { width: 44px; height: 44px; background: linear-gradient(135deg, var(--accent-cyan), #0077ff); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: #fff; box-shadow: 0 0 20px rgba(0, 212, 255, 0.3); }
+        .logo-text { font-weight: 700; font-size: 1.15rem; letter-spacing: -0.02em; }
+        .logo-text span { color: var(--accent-cyan); }
+        .logo-sub { font-size: 0.72rem; color: var(--text-secondary); font-weight: 400; letter-spacing: 0.04em; text-transform: uppercase; }
+        .nav-tabs { display: flex; gap: 4px; background: var(--bg-surface); padding: 4px; border-radius: 12px; border: 1px solid var(--border); }
+        .nav-tab { padding: 10px 22px; border: none; background: transparent; color: var(--text-secondary); font-family: var(--font-main); font-size: 0.85rem; font-weight: 600; cursor: pointer; border-radius: 9px; transition: var(--transition); display: flex; align-items: center; gap: 8px; }
+        .nav-tab:hover { color: var(--text-primary); background: rgba(255,255,255,0.04); }
+        .nav-tab.active { background: var(--accent-cyan); color: #0b0f17; box-shadow: 0 2px 12px rgba(0, 212, 255, 0.3); }
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; position: relative; z-index: 1; }
+        .content-section { display: none; animation: fadeSlideIn 0.4s ease; }
+        .content-section.active { display: block; }
+        @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+        .section-header { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+        .section-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(0, 212, 255, 0.1); border: 1px solid rgba(0, 212, 255, 0.25); color: var(--accent-cyan); padding: 6px 14px; border-radius: 100px; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; }
+        .section-header h1 { font-size: 2rem; font-weight: 700; letter-spacing: -0.03em; line-height: 1.2; }
+        .section-header p { color: var(--text-secondary); margin-top: 8px; max-width: 900px; font-size: 0.95rem; }
+        .content-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px; margin-bottom: 28px; }
+        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; transition: var(--transition); position: relative; overflow: hidden; }
+        .card:hover { border-color: rgba(0, 212, 255, 0.3); box-shadow: 0 0 0 1px rgba(0, 212, 255, 0.1), var(--shadow); }
+        .card-accent { position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--accent-cyan); }
+        .card-accent.amber { background: var(--accent-amber); }
+        .card-accent.green { background: var(--accent-green); }
+        .card-accent.red { background: var(--accent-red); }
+        .card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+        .card h3 i { color: var(--accent-cyan); font-size: 1rem; }
+        .card h4 { font-size: 0.85rem; font-weight: 600; color: var(--accent-amber); text-transform: uppercase; letter-spacing: 0.05em; margin: 16px 0 8px; }
+        .card p, .card li { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.65; }
+        .card ul { padding-left: 18px; margin: 8px 0; }
+        .card ul li { margin-bottom: 6px; }
+        .card ul li strong { color: var(--text-primary); }
+        .img-technical { width: 100%; border-radius: var(--radius-sm); border: 1px solid var(--border); margin: 14px 0; background: #0d1117; object-fit: contain; max-height: 280px; transition: var(--transition); }
+        .img-technical:hover { border-color: var(--accent-cyan); box-shadow: 0 0 20px rgba(0, 212, 255, 0.15); }
+        .img-caption { font-size: 0.78rem; color: var(--text-secondary); text-align: center; margin-top: -8px; margin-bottom: 12px; font-style: italic; }
+        .table-wrapper { overflow-x: auto; margin: 16px 0; border-radius: var(--radius-sm); border: 1px solid var(--border); }
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        th { background: var(--bg-surface); color: var(--accent-cyan); font-weight: 600; text-align: left; padding: 12px 16px; text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.06em; }
+        td { padding: 10px 16px; border-top: 1px solid var(--border); color: var(--text-secondary); }
+        tr:hover td { background: rgba(255,255,255,0.02); }
+        td strong { color: var(--text-primary); }
+        .formula-box { background: #0d1117; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 18px 20px; margin: 14px 0; font-family: var(--font-mono); font-size: 0.9rem; color: var(--accent-green); overflow-x: auto; position: relative; }
+        .formula-box::before { content: 'ƒ'; position: absolute; top: 6px; right: 12px; font-size: 0.75rem; color: var(--text-secondary); opacity: 0.5; font-family: var(--font-main); }
+        .formula-box .var { color: var(--accent-amber); }
+        .formula-box .comment { color: var(--text-secondary); font-size: 0.78rem; }
+        .exam-tag { display: inline-flex; align-items: center; gap: 4px; background: rgba(255, 179, 71, 0.12); border: 1px solid rgba(255, 179, 71, 0.3); color: var(--accent-amber); padding: 3px 10px; border-radius: 100px; font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; margin-left: 8px; vertical-align: middle; }
+        .accordion { border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; margin: 12px 0; }
+        .accordion-header { background: var(--bg-surface); padding: 14px 18px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 0.9rem; transition: var(--transition); border: none; width: 100%; color: var(--text-primary); font-family: var(--font-main); text-align: left; }
+        .accordion-header:hover { background: rgba(0, 212, 255, 0.06); }
+        .accordion-header i { transition: transform 0.3s; color: var(--accent-cyan); }
+        .accordion-header.open i { transform: rotate(180deg); }
+        .accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background: var(--bg-card); }
+        .accordion-body-inner { padding: 18px; font-size: 0.9rem; color: var(--text-secondary); }
+        .accordion-body-inner ul { padding-left: 18px; }
+        .accordion-body-inner li { margin-bottom: 6px; }
+        .chip { display: inline-block; padding: 3px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; font-family: var(--font-mono); }
+        .chip-green { background: rgba(61, 220, 132, 0.15); color: var(--accent-green); border: 1px solid rgba(61, 220, 132, 0.3); }
+        .chip-red { background: rgba(255, 92, 92, 0.15); color: var(--accent-red); border: 1px solid rgba(255, 92, 92, 0.3); }
+        .theory-ref { display: block; margin-top: 12px; padding: 8px 12px; background: rgba(0, 212, 255, 0.1); border-left: 3px solid var(--accent-cyan); font-size: 0.8rem; color: var(--accent-cyan); border-radius: 0 4px 4px 0; }
+        .main-footer { text-align: center; padding: 2rem; margin-top: 3rem; border-top: 1px solid var(--border); color: var(--text-secondary); font-size: 0.8rem; }
+        .main-footer strong { color: var(--accent-cyan); }
+        
+        /* TEST STYLES */
+        .quiz-intro-box { text-align: center; padding: 60px 20px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 20px; }
+        .quiz-intro-box h2 { color: var(--accent-cyan); font-size: 2rem; margin-bottom: 16px; }
+        .quiz-intro-box p { color: var(--text-secondary); margin-bottom: 32px; font-size: 1.1rem; }
+        
+        .quiz-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 20px; }
+        .quiz-question { margin-bottom: 24px; border-bottom: 1px solid var(--border); padding-bottom: 16px; }
+        .quiz-question:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .quiz-question h4 { font-size: 1rem; color: var(--text-primary); margin-bottom: 12px; font-weight: 600; }
+        .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+        .quiz-option { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; transition: var(--transition); }
+        .quiz-option:hover { background: rgba(0, 212, 255, 0.05); border-color: rgba(0, 212, 255, 0.3); }
+        .quiz-option input[type="radio"] { margin-top: 5px; accent-color: var(--accent-cyan); cursor: pointer; }
+        .quiz-option label { cursor: pointer; font-size: 0.9rem; color: var(--text-secondary); flex: 1; }
+        .quiz-option.selected { border-color: var(--accent-cyan); background: rgba(0, 212, 255, 0.1); }
+        .quiz-option.correct { border-color: var(--accent-green); background: rgba(61, 220, 132, 0.1); }
+        .quiz-option.incorrect { border-color: var(--accent-red); background: rgba(255, 92, 92, 0.1); }
+        .btn-submit { display: inline-flex; align-items: center; gap: 8px; background: var(--accent-cyan); color: #0b0f17; border: none; padding: 14px 28px; border-radius: 8px; font-weight: 700; font-family: var(--font-main); font-size: 1.1rem; cursor: pointer; transition: var(--transition); margin-top: 16px; }
+        .btn-submit:hover { background: #00b3d9; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 212, 255, 0.4); }
+        .score-box { text-align: center; padding: 30px; background: var(--bg-surface); border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: 24px; }
+        .score-box h2 { font-size: 2.5rem; color: var(--accent-cyan); margin-bottom: 8px; }
+        .score-box p { font-size: 1.1rem; color: var(--text-secondary); }
+        .error-list { background: rgba(255, 92, 92, 0.05); border: 1px solid rgba(255, 92, 92, 0.2); border-radius: var(--radius-sm); padding: 20px; margin-top: 20px; }
+        .error-item { margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid rgba(255, 92, 92, 0.1); }
+        .error-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .error-q { font-weight: 600; color: var(--accent-red); margin-bottom: 8px; }
+        .error-a { color: var(--text-secondary); font-size: 0.9rem; }
+        .error-a strong { color: var(--accent-green); }
+
+        @media (max-width: 900px) {
+            .header-inner { flex-direction: column; height: auto; padding: 12px 0; gap: 12px; }
+            .nav-tabs { width: 100%; overflow-x: auto; }
+            .nav-tab { padding: 8px 14px; font-size: 0.78rem; white-space: nowrap; }
+            .container { padding: 1.2rem; }
+            .section-header h1 { font-size: 1.5rem; }
+            .content-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 480px) {
+            .logo-text { font-size: 0.95rem; }
+            .logo-sub { display: none; }
+            .nav-tab span { display: none; }
+            .nav-tab i { font-size: 1.1rem; }
+        }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3a4a5e; }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-inner">
+            <div class="logo-group">
+                <div class="logo-icon"><i class="fas fa-cogs"></i></div>
+                <div>
+                    <div class="logo-text">TE701 <span>·</span> Análisis de Manufactura</div>
+                    <div class="logo-sub">FIIS · Universidad Nacional de Ingeniería</div>
+                </div>
+            </div>
+            <nav class="nav-tabs" id="navTabs">
+                <button class="nav-tab active" data-target="pc3"><i class="fas fa-flask"></i> <span>PC3</span></button>
+                <button class="nav-tab" data-target="pc4"><i class="fas fa-microchip"></i> <span>PC4</span></button>
+                <button class="nav-tab" data-target="final"><i class="fas fa-graduation-cap"></i> <span>Final</span></button>
+                <button class="nav-tab" data-target="test"><i class="fas fa-vial"></i> <span>TEST</span></button>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- ============================================================ -->
+        <!-- SECCIÓN TEST -->
+        <!-- ============================================================ -->
+        <section id="test" class="content-section">
+            <div class="section-header">
+                <div class="section-badge"><i class="fas fa-vial"></i> Evaluación de Simulación</div>
+                <h1>Test de 10 Preguntas Aleatorias</h1>
+                <p>Basado exactamente en el banco de preguntas del docente. Selecciona la opción correcta y verifica tu puntaje al finalizar.</p>
+            </div>
+
+            <!-- PANTALLA DE INICIO DEL TEST -->
+            <div id="quiz-intro" class="quiz-intro-box">
+                <h2><i class="fas fa-play-circle" style="color: var(--accent-cyan);"></i> ¿Listo para el desafío?</h2>
+                <p>Este test extraerá <strong>10 preguntas aleatorias</strong> del material oficial del curso.<br>Al finalizar, podrás ver tus respuestas correctas y en qué fallaste.</p>
+                <button class="btn-submit" onclick="startQuiz()"><i class="fas fa-rocket"></i> Iniciar Test</button>
+            </div>
+
+            <!-- CONTENEDOR DEL TEST -->
+            <div id="quiz-wrapper" style="display: none;">
+                <div class="quiz-card" id="quiz-container">
+                    <!-- Las preguntas se inyectan aquí con JS -->
+                </div>
+                <div style="text-align: center; margin-bottom: 40px;">
+                    <button class="btn-submit" onclick="submitQuiz()"><i class="fas fa-paper-plane"></i> Enviar Respuestas</button>
+                </div>
+            </div>
+
+            <!-- CONTENEDOR DE RESULTADOS -->
+            <div id="results-wrapper" style="display: none;">
+                <div class="score-box">
+                    <h2 id="score-display">0 / 10</h2>
+                    <p>Respuestas Correctas</p>
+                    <button class="btn-submit" onclick="resetQuiz()" style="margin-top: 16px; background: var(--accent-amber);"><i class="fas fa-redo"></i> Volver a Intentar</button>
+                </div>
+                <div class="error-list" id="error-container">
+                    <!-- Errores se muestran aquí -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- SECCIÓN PC3 -->
+        <!-- ============================================================ -->
+        <section id="pc3" class="content-section active">
+            <div class="section-header">
+                <div class="section-badge"><i class="fas fa-book-open"></i> Desarrollo Teórico Oficial</div>
+                <h1>Máquinas Herramientas (PC3)</h1>
+                <p>Adaptado del material oficial del docente: Fresadora, Cepilladora, Limadora, Mortajadora y Brochadora. Cubre todas las preguntas del banco de PC3.</p>
+            </div>
+
+            <!-- TEORÍA: FRESADORA -->
+            <div class="card" style="margin-bottom: 20px;">
+                <h3><i class="fas fa-cog"></i> 1. La Fresadora (Según S9 Fresadora.pdf)</h3>
+                <p>Máquina herramienta utilizada para mecanizado por arranque de viruta mediante el movimiento de una herramienta rotativa de varios filos llamada fresa.</p>
+                
+                <div class="content-grid" style="margin-top: 16px;">
+                    <div>
+                        <!-- URL verificada: https://upload.wikimedia.org/wikipedia/commons/8/85/Fresadora_vertical.JPG -->
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwFYkvNPJeD_0ZzFIdS-sQAejpuZilSM08MSdLHiylqJTIS4YWkp26Hm04&s=10" alt="Fresadora Vertical" class="img-technical" loading="lazy">
+                        <div class="img-caption">Fresadora Vertical. Fuente: Wikimedia Commons.</div>
+                    </div>
+                    <div>
+                        <!-- URL verificada: https://upload.wikimedia.org/wikipedia/commons/2/2a/Fresadora_universal_equipada_con_cabezal_vertical_IES_Polit%C3%A9cnico_Sevilla.JPG -->
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSs_8wIo-cyRcUGgkc5V403Ey-EBgLgRQHj4jS13dEw3y5EDzaUpjALOkY&s=10" alt="Fresadora Universal" class="img-technical" loading="lazy">
+                        <div class="img-caption">Fresadora Universal con cabezal vertical. Fuente: Wikimedia Commons.</div>
+                    </div>
+                </div>
+
+                <h4>Partes Principales</h4>
+                <ul>
+                    <li><strong>Base y Columna:</strong> Fundición aleada estabilizada.</li>
+                    <li><strong>Consola:</strong> Se desliza verticalmente sobre la columna.</li>
+                    <li><strong>Mesa:</strong> Superficie ranurada para sujetar la pieza. Movimientos longitudinal y transversal.</li>
+                    <li><strong>Puente:</strong> Pieza apoyada en voladizo; aloja lunetas.</li>
+                    <li><strong>Portaherramientas (Portafresas):</strong> Es el componente más común que sujeta la herramienta en la fresadora.</li>
+                </ul>
+
+                <h4>Tipos de Fresadoras</h4>
+                <ul>
+                    <li><strong>Horizontal:</strong> Husillo paralelo a la mesa. <em>Limitación:</em> No puede mecanizar superficies que requieran acceso vertical; se soluciona con un cabezal vertical o fresadora universal.</li>
+                    <li><strong>Vertical:</strong> Husillo perpendicular a la mesa. Trabajos de fresado frontal.</li>
+                    <li><strong>Universal:</strong> Husillo principal horizontal más cabezal acoplable (se convierte en vertical). Mesa giratoria derecha/izquierda. Permite fresado de ranuras helicoidales.</li>
+                    <li><strong>Generadoras:</strong> Se usan para mecanizar engranajes, cremalleras y piezas cilíndricas.</li>
+                </ul>
+
+                <h4>Operaciones y Capacidades (Preguntas de examen)</h4>
+                <p>La fresadora permite realizar formas: Planas, Cóncavas, Convexas, Combinadas, Ranuradas, Engranajes. <strong>NO SE REALIZA: Hélices</strong> (según el docente, su geometría compleja lo impide).</p>
+                <p><strong>Refrentado:</strong> Sí se puede realizar en fresadora (operación similar a la planeadora).</p>
+                <p><strong>Mecanizado de engranajes:</strong> Sí se puede, utilizando un <strong>plato divisor</strong>.</p>
+                <p><strong>Tren de fresado:</strong> Montar varias fresas en el eje para ranuras paralelas. Se realiza en la <strong>Fresadora Horizontal</strong>.</p>
+
+                <h4>Parámetros de Corte</h4>
+                <div class="formula-box">
+                    Vc (m/min) = (π · D · n) / 1000
+                </div>
+                <p><strong>Avance por diente:</strong> Es el desplazamiento de la obra cuando el diente anterior ocupa el mismo lugar del diente posterior inmediato.</p>
+                <p><strong>Consideración de diámetro:</strong> Debe verificarse que el diámetro del husillo sea compatible con el diámetro del agujero de la fresa o de su sistema de sujeción.</p>
+                <p><strong>Sujeción de fresas:</strong> Portafresas, portapinzas, tornillos de fijación, mandriles.</p>
+                <p><strong>Modos de sujeción de piezas:</strong> Mordazas, bridas, gatos, tornillos, ranuras en T.</p>
+                <p><strong>Aceite de corte:</strong> Aceite soluble o emulsiones refrigerantes.</p>
+                <p><strong>Fresas de disco con dientes cruzados:</strong> Evitan el roce lateral y permiten mayores avances.</p>
+            </div>
+
+            <!-- TEORÍA: CEPILLADORA Y LIMADORA -->
+            <div class="card" style="margin-bottom: 20px;">
+                <h3><i class="fas fa-grip-lines"></i> 2. Cepilladora y Limadora (Según S11 y CEPILLADORA 3)</h3>
+                <div class="content-grid" style="margin-top: 16px;">
+                    <div>
+                        <p><strong>Cepilladora:</strong> La mesa se mueve longitudinalmente (movimiento de corte) y la herramienta tiene avance transversal intermitente. Usada para mecanizar superficies planas extensas con excelente acabado.</p>
+                        <!-- URL verificada: https://upload.wikimedia.org/wikipedia/commons/b/b7/Planer_A-5.JPG -->
+                        <img src="https://chinelatto.com.br/img.php?f=pf30e_b5c3adbc6bd8c34813f185b8_amb.jpg&w=800&v=2.1786718233" alt="Cepilladora" class="img-technical" loading="lazy">
+                        <div class="img-caption">Cepilladora (Planer). Fuente: Wikimedia Commons.</div>
+                    </div>
+                    <div>
+                        <p><strong>Limadora (Cepillo de codo):</strong> La herramienta tiene movimiento longitudinal principal y la mesa tiene avance transversal. Es una máquina lenta con capacidad limitada.</p>
+                        <!-- URL verificada: https://upload.wikimedia.org/wikipedia/commons/0/0c/Shaper_bangla.JPG -->
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgHM2EatZGhhrX8PraaJUUCKpyd-MmvQafs0WR6AmuVxtC-78f" alt="Limadora" class="img-technical" loading="lazy">
+                        <div class="img-caption">Esquema de una Limadora (Cepillo de codo). Fuente: Wikimedia Commons.</div>
+                    </div>
+                </div>
+
+                <h4>Movimientos de la Mesa en Cepilladora</h4>
+                <ul>
+                    <li><strong>Longitudinal:</strong> De izquierda a derecha (movimiento de corte).</li>
+                    <li><strong>Transversal:</strong> De adentro hacia afuera (avance).</li>
+                    <li><strong>Vertical:</strong> De arriba hacia abajo (penetración).</li>
+                </ul>
+
+                <h4>Sujeción en Cepilladora</h4>
+                <p>Se usan: Ranuras en tipo T, tornillos y pernos de sujeción, pinzas, mordaza.</p>
+
+                <h4>Ajustes y Mecanismos</h4>
+                <p><strong>Ajuste del carro:</strong> Mediante tornillos de ajuste y guías que permiten desplazarlo al punto de inicio adecuado.</p>
+                <p><strong>Tamaño del cepillo de codo:</strong> Se determina por la <strong>longitud máxima de la carrera útil</strong> que puede realizar.</p>
+                <p><strong>Velocidad en vacío:</strong> Se llama velocidad de <strong>recuperación o retorno</strong> (carrera de retorno).</p>
+                <p><strong>Mecanismos de movimiento alternativo:</strong> Excéntrica, biela-manivela, leva, piñón-cremallera, cilindro hidráulico.</p>
+                
+                <h4>Cepillo de Codo Hidráulico</h4>
+                <p><strong>Componentes:</strong> Cilindro hidráulico, bomba hidráulica, válvula de control, depósito, sistema de guías y ariete.</p>
+                <p><strong>Movimiento del ariete:</strong> Tiene un movimiento <strong>longitudinal alternativo</strong>.</p>
+                <p><strong>Sistemas de transmisión:</strong> Mecánico (movimiento del motor a un piñón, luego a un sistema plato-manivela que transforma el movimiento circular en longitudinal) e Hidráulico (uso de aceite y pistones).</p>
+                
+                <h4>Limitaciones de la Cepilladora de Codo</h4>
+                <p>Menor capacidad de mecanizado en piezas grandes, menor productividad comparada con fresadoras.</p>
+                <p><strong>Aplicación:</strong> Para mecanizar superficies planas extensas.</p>
+            </div>
+
+            <!-- TEORÍA: MORTAJADORA Y BROCHADORA -->
+            <div class="card" style="margin-bottom: 20px;">
+                <h3><i class="fas fa-arrows-alt-v"></i> 3. Mortajadora y Brochadora</h3>
+                <div class="content-grid" style="margin-top: 16px;">
+                    <div>
+                        <p><strong>Mortajadora (Cepilladora Vertical):</strong> La herramienta se desplaza verticalmente con movimiento rectilíneo alternativo. Es una M-H que se usa especialmente para hacer <strong>canales chaveteros</strong>, también dientes de engranajes. Su uso principal es el cepillado vertical.</p>
+                        <!-- Se usa la misma imagen de la limadora como referencia visual -->
+                        <img src="https://5.imimg.com/data5/JE/WK/MY-25293936/slotter-machine.jpg" alt="Mortajadora" class="img-technical" loading="lazy">
+                        <div class="img-caption">Esquema de una Mortajadora (Cepilladora Vertical). Fuente: Wikimedia Commons.</div>
+                    </div>
+                    <div>
+                        <p><strong>Brochadora:</strong> El brochado tiene extenso campo de aplicación en piezas de fabricación en serie donde los agujeros y ranuras deban ser calibrados con dimensiones exactas. Herramienta: <strong>Brocha</strong>.</p>
+                        <!-- URL verificada: https://upload.wikimedia.org/wikipedia/commons/e/e5/Raeummaschine_Hydraulikzylinder.JPG -->
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfz7YanazOxRdBZvRLh2Au_HErUnsWHU6wdJFD1wrJtDDFfnQZ" alt="Brochadora hidráulica" class="img-technical" loading="lazy">
+                        <div class="img-caption">Cilindro hidráulico de una máquina brochadora. Fuente: Wikimedia Commons.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BANCO DE PREGUNTAS PC3 -->
+            <div class="card" style="margin-top: 32px; border-color: var(--accent-amber);">
+                <h3><i class="fas fa-clipboard-check" style="color: var(--accent-amber);"></i> Banco de Preguntas Verificadas — PC3 (Material Oficial)</h3>
+                <p style="margin-bottom: 16px;">Preguntas textuales extraídas de los documentos del docente (Preguntas Manufactura, PC4 25-2, etc.).</p>
+
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>Es una M-H que especialmente se usa para hacer canales chaveteros también, dientes de engranajes, de que maquina herramienta nos estamos refiriendo? <span class="exam-tag">PC3</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">Se llama la mortajadora (cepilladora vertical)</span>.</p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 3. Mortajadora y Brochadora.</div>
+                    </div></div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>Un cepillo de codo Hidraulico, que componentes tiene para su funcionamiento; el arriete como se mueve? <span class="exam-tag">PC3</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">cilindro hidráulico, bomba hidráulica, válvula de control, depósito, sistema de guías y arriete. El Arriete tiene un movimiento longitudinal alternativo.</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 2. Cepilladora y Limadora (Cepillo de Codo Hidráulico).</div>
+                    </div></div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>Cuales son los movimientos de la mesa, en la cepilladora <span class="exam-tag">PC3</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">Movimiento longitudinal (Para moverse de izquierda a derecha), Movimiento transversal (De adentro hacia afuera), Movimiento vertical (De arriba hacia abajo).</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 2. Cepilladora y Limadora (Movimientos de la mesa).</div>
+                    </div></div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>Que elementos (componentes-sujeccion) se usan en la cepilladora para proceder a mecanizar muy optimamente una obra? <span class="exam-tag">PC3</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">Ranuras en tipo de T, Tornillos y pernos de sujeción, Pinzas, Mordaza.</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 2. Cepilladora y Limadora (Sujeción en Cepilladora).</div>
+                    </div></div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>En una Cepilladora como se ajusta el carro, para proceder a mecanizar. <span class="exam-tag">PC3</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">Mediante tornillos de ajuste y guías que permiten desplazarlo al punto de inicio adecuado antes del mecanizado.</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 2. Cepilladora y Limadora (Ajustes y Mecanismos).</div>
+                    </div></div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>La fresadora nos permite realizar operaciones de fresado de superficies de las formas: • Planas • Cóncavas • Convexas • Combinadas • Ranuradas • Engranajes • Hélices . Que tipo de forma de las descritas NO SE REALIZA? <span class="exam-tag">PC3</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-red">No se pueden realizar formas de hélices ya que su geometría compleja hace imposible su mecanizado con una fresadora.</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 1. La Fresadora (Operaciones y Capacidades).</div>
+                    </div></div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>Explique cuando usamos la Maquinas GENERADORAS? <span class="exam-tag">PC3</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">Se utilizan para poder mecanizar piezas en formas de engranajes, cremalleras y piezas cilíndricas.</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 1. La Fresadora (Tipos de Fresadoras).</div>
+                    </div></div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>Cual es el nombre del componente mas común que sujeta a la herramienta en una fresadora. <span class="exam-tag">PC3</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">El porta herramientas.</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 1. La Fresadora (Partes Principales).</div>
+                    </div></div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>En un Cepillado como se llama la velocidad durante la carrera en vacio? <span class="exam-tag">PC3</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">Se llama velocidad de recuperación o retorno.</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 2. Cepilladora y Limadora (Ajustes y Mecanismos).</div>
+                    </div></div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>Como se determina el tamaño de un cepillo de codo? <span class="exam-tag">PC3</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">Se determina por la longitud máxima de la carrera útil que puede realizar.</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 2. Cepilladora y Limadora (Ajustes y Mecanismos).</div>
+                    </div></div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>En un proceso de fresado que consideraciones se debe tomar en cuenta con respecto al diámetro de la fresa con el diámetro del husillo. <span class="exam-tag">PC3</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">Debe verificarse que el diámetro del husillo sea compatible con el diámetro del agujero de la fresa o de su sistema de sujeción.</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 1. La Fresadora (Parámetros de Corte).</div>
+                    </div></div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>Como se define la velocidad de corte en un fresado en (m/min)? <span class="exam-tag">PC3</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">Es la velocidad a la cual el filo cortante de la fresa entra en contacto con la pieza de trabajo para realizar el fresado. Vc = π.D.n/1000</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 1. La Fresadora (Parámetros de Corte).</div>
+                    </div></div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>Defina que es el Avance por diente en el fresado?. <span class="exam-tag">PC3</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">Es el desplazamiento de la fresa cuando el diente anterior ocupa el mismo lugar del diente posterior inmediato.</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 1. La Fresadora (Parámetros de Corte).</div>
+                    </div></div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>¿Que es un divisor Universal (plato divisor), para que sirve? <span class="exam-tag">PC3</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">Es un accesorio que se acopla a la mesa con la finalidad de poder realizar divisiones angulares exactas para la elaboración de dientes de engranajes.</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 1. La Fresadora (Operaciones y Capacidades).</div>
+                    </div></div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>¿Un refrentado se puede realizar con el torno, también es posible con una fresadora? Si ó no; Porque, explique <span class="exam-tag">PC3</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">Sí, ya que en un refrentado la herramienta se mecaniza con la finalidad de eliminar las irregularidades en la cara principal, con una fresadora la operación similar sería la planeadora ya que permite la superficie plana.</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 1. La Fresadora (Operaciones y Capacidades).</div>
+                    </div></div>
+                </div>
+                
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>Con respecto a las cepilladoras que tipos de sistemas de transmisión conoce Ud? ¿Los cepillos de codo que sistema de transmisión tiene? <span class="exam-tag">PC3</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">Sistema mecánico (movimiento transmitido de un motor hacia un piñón y de este a un sistema plato manivela que transforma el mov. Circular en longitudinal: tornillo sinfín, piñón y cremallera, biela-manivela). Sistema hidráulico (mediante fluidos como el aceite, se emplean pistones para realizar el movimiento longitudinal).</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 2. Cepilladora y Limadora (Ajustes y Mecanismos).</div>
+                    </div></div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>Las fresas pueden ser sujetadas según mecanismos de sujeción al portafresa con herramientas como... <span class="exam-tag">PC3 / PC4 25-2</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">Portafresas, portapinzas, tornillos de fijación, mandriles.</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 1. La Fresadora (Parámetros de Corte).</div>
+                    </div></div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>Explique que es un mecanismo divisor <span class="exam-tag">PC3</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">Dispositivo que permite dividir una pieza en partes iguales mediante giros precisos para operaciones sucesivas.</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 1. La Fresadora (Operaciones y Capacidades).</div>
+                    </div></div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>El fresado de engranajes, se realiza en qué tipo de fresadoras mediante un dispositivo llamado... <span class="exam-tag">PC3</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">Se realiza en fresadoras universales o fresadoras generadoras mediante un plato divisor.</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 1. La Fresadora (Operaciones y Capacidades).</div>
+                    </div></div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>Cuando utilizamos una cepilladora? <span class="exam-tag">PC3</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">Para mecanizar superficies planas extensas con excelente acabado.</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 2. Cepilladora y Limadora.</div>
+                    </div></div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>Cuáles son las limitaciones operacionales en el uso de una cepilladora de codo <span class="exam-tag">PC3</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">Menor capacidad de mecanizado en piezas grandes, menor productividad comparada con fresadoras.</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 2. Cepilladora y Limadora.</div>
+                    </div></div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>1.- a) ¿Cuál es la limitación de trabajo de las fresadoras horizontales, y de que depende para solucionar este escollo? <span class="exam-tag">PC4 25-2</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">La limitación es que no puede mecanizar superficies que requieran acceso vertical. Se soluciona acoplando un cabezal vertical (convirtiéndola en universal) o utilizando una fresadora vertical.</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 1. La Fresadora (Tipos de Fresadoras).</div>
+                    </div></div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>b) Cuales son las características de las fresas de disco con diente cruzados <span class="exam-tag">PC4 25-2</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">Evitan el roce lateral y permiten mayores avances.</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 1. La Fresadora (Parámetros de Corte).</div>
+                    </div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- SECCIÓN PC4 -->
+        <!-- ============================================================ -->
+        <section id="pc4" class="content-section">
+            <div class="section-header">
+                <div class="section-badge"><i class="fas fa-book-open"></i> Desarrollo Teórico Oficial</div>
+                <h1>Control Numérico, FMS y Costos (PC4)</h1>
+                <p>Adaptado del material oficial del docente: CNC, CAD/CAM, Sistemas Flexibles, Taylor y análisis de costos.</p>
+            </div>
+
+            <!-- TEORÍA: CNC -->
+            <div class="card" style="margin-bottom: 20px;">
+                <h3><i class="fas fa-microchip"></i> 1. Control Numérico por Computadora (CNC)</h3>
+                
+                <div class="content-grid" style="margin-top: 16px;">
+                    <div>
+                        <!-- URL verificada: https://upload.wikimedia.org/wikipedia/commons/e/ee/Centro_cnc_cinco_ejes.jpg -->
+                        <img src="https://www.rapiddirect.com/wp-content/uploads/2022/10/how-5-axis-machining-works.webp" alt="Centro de mecanizado CNC" class="img-technical" loading="lazy">
+                        <div class="img-caption">Centro de mecanizado CNC de 5 ejes. Fuente: Wikimedia Commons.</div>
+                    </div>
+                    <div>
+                        <!-- URL verificada: https://upload.wikimedia.org/wikipedia/commons/2/2a/Componente_mecanizado.JPG -->
+                        <img src="https://umesal.com/wp-content/uploads/2017/12/Mecanizado-por-arranque-de-viruta.jpg" alt="Pieza mecanizada en CNC" class="img-technical" loading="lazy">
+                        <div class="img-caption">Pieza mecanizada por arranque de viruta en un centro de mecanizado. Fuente: Wikimedia Commons.</div>
+                    </div>
+                </div>
+
+                <h4>Conceptos Clave (Preguntas de examen)</h4>
+                <ul>
+                    <li><strong>Carácter "T":</strong> Número de la herramienta.</li>
+                    <li><strong>Carácter "U":</strong> Coordenada incremental al eje X.</li>
+                    <li><strong>Comunicación:</strong> Se realiza a través de la <strong>Interfase</strong> (monitor-pantalla, ingreso de datos).</li>
+                    <li><strong>Instrucciones del programa:</strong> Se les conoce como <strong>Códigos de CNC</strong>.</li>
+                    <li><strong>Estructura de programación:</strong> Bloques, palabras, programa y movimiento. (Las "sentencias" NO son un componente estándar).</li>
+                    <li><strong>Normalización:</strong> Los códigos se normalizan y estandarizan (ISO G-Code) para compatibilidad entre fabricantes.</li>
+                    <li><strong>Orden:</strong> Cada orden se denomina <strong>Bloque de Código CNC</strong>.</li>
+                    <li><strong>Comandos G:</strong> Son <strong>Órdenes geométricas</strong> (G00 rápido, G01 lineal, G02/G03 interpolado).</li>
+                    <li><strong>Ubicación de un punto:</strong> Se ubica por la distancia del origen a dicho punto (su punto de referencia).</li>
+                </ul>
+
+                <h4>Centros de Mecanizado</h4>
+                <p>Poseen 3 ejes lineales (X, Y, Z) más:</p>
+                <ul>
+                    <li><strong>4to eje:</strong> Orientación del cabezal.</li>
+                    <li><strong>5to eje:</strong> Giro de la mesa.</li>
+                    <li><strong>6to eje:</strong> Aproximación de la herramienta.</li>
+                </ul>
+                <p><strong>Panel de control:</strong> Es el componente de interacción hombre-máquina donde se controlan parámetros como posiciones (X,Y,Z), velocidades de corte y avance, elección de herramienta.</p>
+                <p><strong>Sistemas de Coordenadas:</strong> De la máquina, de trabajo, de referencias (absolutas, incrementales, polares).</p>
+
+                <h4>CAD/CAM</h4>
+                <!-- URL verificada: https://upload.wikimedia.org/wikipedia/commons/5/5c/WorkXplore3D.jpg -->
+                <img src="https://statics.zwsoft.com/upload/default/20251229/d8ba65857ed0ab25353ee8737a4bb7b5.jpeg" alt="Software CAD/CAM" class="img-technical" loading="lazy">
+                <div class="img-caption">Interfaz típica de un software CAD/CAM. Fuente: Wikimedia Commons.</div>
+                <p><strong>CAD:</strong> Realiza el diseño de la pieza con herramientas de dibujo y modelado sólido.</p>
+                <p><strong>CAM:</strong> Toma la información del diseño y genera la ruta de corte que tiene que seguir la herramienta para fabricar la pieza deseada, creando automáticamente el programa de maquinado.</p>
+                <p><strong>Líneas Transfer:</strong> Sistemas de fabricación en línea con transferencia automatizada entre estaciones.</p>
+            </div>
+
+            <!-- TEORÍA: FMS -->
+            <div class="card" style="margin-bottom: 20px;">
+                <h3><i class="fas fa-network-wired"></i> 2. Sistemas de Fabricación Flexible (FMS)</h3>
+                <h4>Objetivos y Disposiciones (Preguntas de examen)</h4>
+                <ul>
+                    <li><strong>Objetivo principal:</strong> Eliminación de stocks, tanto en materia prima y materiales en procesos.</li>
+                    <li><strong>Disposiciones de máquinas:</strong> Serie (A--B--C), Paralelo (ABCD ABCD) y Mixto (combinación de ambos).</li>
+                </ul>
+                <h4>Exigencias del Mercado</h4>
+                <p>La fuerte competitividad obliga al fabricante a ofrecer una mayor gama de productos. Esto plantea exigencias de <strong>personalización, menor tiempo de entrega, precios competitivos y alta calidad</strong> (Fabricación Flexible).</p>
+                <h4>Pieza Compuesta</h4>
+                <p>Pieza hipotética que combina geometrías de una familia real. Ejemplo: familia de ejes.</p>
+            </div>
+
+            <!-- TEORÍA: TAYLOR -->
+            <div class="card">
+                <div class="card-accent green"></div>
+                <h3><i class="fas fa-chart-line"></i> 3. Ecuación de Taylor y Costos (Problemas de Final)</h3>
+                <div class="formula-box"><span class="var">V</span> · <span class="var">T</span><sup>n</sup> = <span class="var">C</span></div>
+                <p><strong>Costo de un filo (Y):</strong> Y = G + hg / h. <strong>Costo por pieza:</strong> Ch/pieza = (Tm / T) · Y.</p>
+                <h4>Problema Resuelto 1 (Final 2025-1)</h4>
+                <p>Mecanizado de espigas: D=25mm, L=60mm, a=0.2 mm/rev, p=0.8mm, n=260 rpm. Taylor: Vt<sup>0.25</sup>=34. Costo inicial S/.860, costo reafilado S/.35, promedio 60.</p>
+                <div class="formula-box">
+                    Y = 860 + (35*60)/60 = <strong>49.33</strong><br><br>
+                    Vc = π*25*260/1000 = 20.42 m/min<br>
+                    T = (34/20.42)<sup>1/0.25</sup> = 7.68 min<br>
+                    Tm = 60/(0.2*260) = 1.154 min<br>
+                    Ch/pieza = (1.154/7.68)*49.33 = <strong>7.40 S/./pieza</strong>
+                </div>
+
+                <h4>Problema Resuelto 2 (Final 2025-1)</h4>
+                <p>V=26 m/min para t=4h. Reducción del 22% en V aumenta vida 2.8 veces. Hallar n.</p>
+                <div class="formula-box">
+                    V1=26, T1=4h; V2=0.78*26, T2=(2.8+1)*4 = 3.8*4<br>
+                    26*4<sup>n</sup> = 0.78*26*(3.8*4)<sup>n</sup><br>
+                    (3.8)<sup>n</sup> = 1.28<br>
+                    n = ln(1.28) / ln(3.8) = <strong>0.19</strong>
+                </div>
+            </div>
+
+            <!-- BANCO DE PREGUNTAS PC4 -->
+            <div class="card" style="margin-top: 32px; border-color: var(--accent-amber);">
+                <h3><i class="fas fa-clipboard-check" style="color: var(--accent-amber);"></i> Banco de Preguntas Verificadas — PC4</h3>
+                <p style="margin-bottom: 16px;">Preguntas textuales extraídas de los exámenes.</p>
+
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>En MH con CNC, a qué se le asigna al carácter "T" y "U"? <span class="exam-tag">PC4 / Final 25-1</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">T: es el numero de la herramienta. U: coordenada incremental al eje X.</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 1. Control Numérico por Computadora (Conceptos Clave).</div>
+                    </div></div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>La comunicación entre el programa y la MHCNC como se realiza? <span class="exam-tag">PC4 / Final 25-1</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">Es a través de la Interfase. (monitor -pantalla, del ingreso de datos).</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 1. Control Numérico por Computadora (Conceptos Clave).</div>
+                    </div></div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>Explique cuales son las disposiciones de maquinas en un proceso de Fabricacion Flexible? <span class="exam-tag">PC4</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">Serie A --- B --- C; Paralelo ABCD ABCD; Mixto combinación de ambos.</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 2. Sistemas de Fabricación Flexible (FMS).</div>
+                    </div></div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>En un sistema de Control Numérico Computarizado, cuales son los tipos de sistemas de Coordenadas <span class="exam-tag">PC4</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">Sistemas de coordenadas de la maquina, Sistemas de coordenadas de trabajo, Sistemas de coordenadas de referencias (Absolutas, Incrementales, Polares).</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 1. Control Numérico por Computadora (Centros de Mecanizado).</div>
+                    </div></div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>Cual es el objetivo de fabricación flexible con respecto a los almacenes? <span class="exam-tag">PC4</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">Eliminación de stocks, tanto en materia prima y materiales en procesos.</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 2. Sistemas de Fabricación Flexible (FMS).</div>
+                    </div></div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>Como se ubica un punto en un proceso de programación del maquinado? <span class="exam-tag">PC4</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">Se ubica por la distancia del origen a dicho punto, su punto de referencia.</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 1. Control Numérico por Computadora (Conceptos Clave).</div>
+                    </div></div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>En los Centros de mecanizado, además de los tres ejes principales, cuantos ejes mas poseen y cual es su función de cada uno <span class="exam-tag">PC4</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">4to eje: orientación del cabezal. 5to eje: giro de la mesa. 6to eje: aproximación de la herramienta.</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 1. Control Numérico por Computadora (Centros de Mecanizado).</div>
+                    </div></div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>A las instrucciones en un programa como se le conoce? <span class="exam-tag">PC4</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">Códigos de CNC.</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 1. Control Numérico por Computadora (Conceptos Clave).</div>
+                    </div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- SECCIÓN FINAL -->
+        <!-- ============================================================ -->
+        <section id="final" class="content-section">
+            <div class="section-header">
+                <div class="section-badge"><i class="fas fa-graduation-cap"></i> Temas Integradores</div>
+                <h1>Mecanizados Especiales y Otros (Final)</h1>
+                <p>Chorro de agua, ultrasonido, transfer, pintado y banco de preguntas teóricas del Final.</p>
+            </div>
+
+            <!-- TEORÍA: MECANIZADOS ESPECIALES -->
+            <div class="content-grid">
+                <div class="card">
+                    <div class="card-accent"></div>
+                    <h3><i class="fas fa-water"></i> 1. Mecanizado por Chorro de Agua (WJC)</h3>
+                    <!-- URL verificada: https://upload.wikimedia.org/wikipedia/commons/8/8a/Waterjet-thick-cut.jpg -->
+                    <img src="https://www.metalmecanica.com/uploads/news-pictures/pphoto-2032.webp" alt="Corte por chorro de agua" class="img-technical" loading="lazy">
+                    <div class="img-caption">Corte de acero grueso con chorro de agua abrasivo. Fuente: Wikimedia Commons.</div>
+                    <p><strong>Ventajas:</strong> Proceso de corte en frío. No genera tensión térmica, ni endurecimiento, ni torsión. No usa electrodos.</p>
+                </div>
+                <div class="card">
+                    <div class="card-accent amber"></div>
+                    <h3><i class="fas fa-wave-square"></i> 2. Mecanizado por Ultrasonido (USM)</h3>
+                    <!-- Se omite la imagen de ultrasonido por falta de una fuente clara verificable -->
+                    <p><strong>Propagación:</strong> Requiere un medio (gaseoso, líquido o sólido).</p>
+                    <p><strong>Magnetostrictor:</strong> Transforma las oscilaciones eléctricas en vibraciones mecánicas.</p>
+                </div>
+            </div>
+
+            <div class="card" style="margin-bottom: 20px;">
+                <h3><i class="fas fa-paint-roller"></i> 3. Pintado de Superficie Metálica y Maquinabilidad</h3>
+                <p><strong>Pintado:</strong> Limpiar, desengrasar, lijar, aplicar fondo anticorrosivo y luego pintura.</p>
+                <p><strong>Maquinabilidad (Criterio):</strong> Se considera en función de la duración de la herramienta, acabado superficial y capacidad de mecanizado.</p>
+                <p><strong>Relación de Taylor (Limitación):</strong> Solo es válida en un rango limitado de velocidades de corte, no contempla todas las variables de mecanizado.</p>
+            </div>
+
+            <!-- BANCO DE PREGUNTAS FINAL -->
+            <div class="card" style="margin-top: 32px; border-color: var(--accent-amber);">
+                <h3><i class="fas fa-clipboard-check" style="color: var(--accent-amber);"></i> Banco de Preguntas Verificadas — Final (Teoría)</h3>
+                
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>Cuales son las ventajas mas resaltantes del mecanizado por chorro de agua. <span class="exam-tag">PC4 25-2 / Final</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">Corte en frío, no genera tensiones térmicas, no usa electrodos.</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 1. Mecanizado por Chorro de Agua.</div>
+                    </div></div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>Explique que son las líneas transfer en CNC. <span class="exam-tag">PC4 25-2</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">Sistemas de fabricación en línea con transferencia automatizada entre estaciones.</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 1. Control Numérico (CAD/CAM).</div>
+                    </div></div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>Cual es el requisito para que las ondas ultrasónicas puedan propagarse <span class="exam-tag">Final</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">debe haber un medio, gaseoso, liquido o solido (porciones de materia).</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 2. Mecanizado por Ultrasonido.</div>
+                    </div></div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>Que función desempeña el MAGNETO ESTRICTOR? (en equipos de ultrasonido) <span class="exam-tag">Final</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">Transforma las oscilaciones eléctricas en vibraciones mecanicas.</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 2. Mecanizado por Ultrasonido.</div>
+                    </div></div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>Cómo debo proceder para el pintado de una superficie plana metálica? <span class="exam-tag">Final</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">Limpiar, desengrasar, lijar, aplicar fondo anticorrosivo y luego pintura.</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 3. Pintado de Superficie Metálica.</div>
+                    </div></div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>Dentro del criterio de evaluación de la maquinabilidad, qué criterio se considera? En función de... <span class="exam-tag">Final</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">Se considera en función de la duración de la herramienta, acabado superficial y capacidad de mecanizado.</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 3. Pintado de Superficie Metálica y Maquinabilidad.</div>
+                    </div></div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-header" onclick="toggleAccordion(this)"><span>En la relación de Taylor qué limitación existe? <span class="exam-tag">Final</span></span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-body-inner">
+                        <p><strong>Respuesta:</strong> <span class="chip chip-green">Solo válida en un rango limitado de velocidades de corte, no contempla todas las variables de mecanizado.</span></p>
+                        <div class="theory-ref">Ubicación en la teoría: Sección 3. Pintado de Superficie Metálica y Maquinabilidad.</div>
+                    </div></div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer class="main-footer">
+        <p><strong>TE701 · Análisis de Manufactura</strong> — Material de estudio interactivo basado en los documentos oficiales del docente.</p>
+        <p style="margin-top: 6px; font-size: 0.75rem;">FIIS · Universidad Nacional de Ingeniería</p>
+    </footer>
+
+    <script>
+        // ====== NAVEGACIÓN ======
+        const navTabs = document.querySelectorAll('.nav-tab');
+        const sections = document.querySelectorAll('.content-section');
+        navTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                navTabs.forEach(t => t.classList.remove('active'));
+                sections.forEach(s => s.classList.remove('active'));
+                tab.classList.add('active');
+                const targetId = tab.getAttribute('data-target');
+                document.getElementById(targetId).classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+
+        // ====== ACORDEÓN ======
+        function toggleAccordion(header) {
+            const body = header.nextElementSibling;
+            const isOpen = header.classList.contains('open');
+            document.querySelectorAll('.accordion-header').forEach(h => {
+                if (h !== header) { h.classList.remove('open'); h.nextElementSibling.style.maxHeight = null; }
+            });
+            if (isOpen) { header.classList.remove('open'); body.style.maxHeight = null; }
+            else { header.classList.add('open'); body.style.maxHeight = body.scrollHeight + 'px'; }
+        }
+
+        // ====== LÓGICA DEL TEST ======
+        const questionBank = [
+            // Preguntas de Preguntas Manufactura.docx
+            {
+                q: "Es una M-H que especialmente se usa para hacer canales chaveteros también, dientes de engranajes, de que maquina herramienta nos estamos refiriendo?",
+                options: ["a. Fresadora", "b. Mortajadora (cepilladora vertical)", "c. Torno", "d. Taladro"],
+                correct: 1
+            },
+            {
+                q: "Un cepillo de codo Hidraulico, que componentes tiene para su funcionamiento; el arriete como se mueve?",
+                options: ["a. Motor y engranajes; movimiento rotatorio", "b. Cilindro, bomba, válvula, depósito, guías y arriete; movimiento longitudinal alternativo", "c. Biela y manivela; movimiento circular", "d. Piñón y cremallera; movimiento vertical"],
+                correct: 1
+            },
+            {
+                q: "Cuales son los movimientos de la mesa, en la cepilladora?",
+                options: ["a. Solo longitudinal", "b. Longitudinal, transversal y vertical", "c. Rotatorio y axial", "d. Solo vertical"],
+                correct: 1
+            },
+            {
+                q: "Que elementos (componentes-sujeccion) se usan en la cepilladora para proceder a mecanizar muy optimamente una obra?",
+                options: ["a. Bridas y gatos", "b. Ranuras T, tornillos, pinzas y mordaza", "c. Platos de arrastre", "d. Mandriles"],
+                correct: 1
+            },
+            {
+                q: "En una Cepilladora como se ajusta el carro, para proceder a mecanizar.",
+                options: ["a. Con martillo", "b. Mediante tornillos de ajuste y guías", "c. Con llave inglesa", "d. No se ajusta"],
+                correct: 1
+            },
+            {
+                q: "La fresadora nos permite realizar operaciones de fresado de superficies de las formas: Planas, Cóncavas, Convexas, Combinadas, Ranuradas, Engranajes, Hélices. Que tipo de forma de las descritas NO SE REALIZA?",
+                options: ["a. Planas", "b. Cóncavas", "c. Hélices", "d. Engranajes"],
+                correct: 2
+            },
+            {
+                q: "Explique cuando usamos la Maquinas GENERADORAS?",
+                options: ["a. Para hacer agujeros", "b. Para mecanizar engranajes, cremalleras y piezas cilíndricas", "c. Para pulir superficies", "d. Para cortar metales"],
+                correct: 1
+            },
+            {
+                q: "Cual es el nombre del componente mas común que sujeta a la herramienta en una fresadora.",
+                options: ["a. Cono Morse", "b. El porta herramientas", "c. El husillo", "d. Mordaza"],
+                correct: 1
+            },
+            {
+                q: "En un Cepillado como se llama la velocidad durante la carrera en vacio?",
+                options: ["a. Velocidad de corte", "b. Velocidad de avance", "c. Velocidad de recuperación o retorno", "d. Velocidad crítica"],
+                correct: 2
+            },
+            {
+                q: "Como se determina el tamaño de un cepillo de codo?",
+                options: ["a. Por su peso", "b. Por la longitud máxima de la carrera útil que puede realizar", "c. Por el diámetro del volante", "d. Por la potencia del motor"],
+                correct: 1
+            },
+            {
+                q: "En un proceso de fresado que consideraciones se debe tomar en cuenta con respecto al diámetro de la fresa con el diámetro del husillo.",
+                options: ["a. Deben ser exactamente iguales", "b. Verificar compatibilidad con el agujero de la fresa o sistema de sujeción", "c. La fresa debe ser más pequeña", "d. No importa"],
+                correct: 1
+            },
+            {
+                q: "Como se define la velocidad de corte en un fresado en (m/min)?",
+                options: ["a. Vc = π.D.n/1000", "b. Vc = D.n", "c. Vc = F.n", "d. Vc = L/t"],
+                correct: 0
+            },
+            {
+                q: "Defina que es el Avance por diente en el fresado?.",
+                options: ["a. El avance total de la mesa", "b. El desplazamiento de la fresa cuando el diente anterior ocupa el mismo lugar del diente posterior", "c. La velocidad de rotación de la fresa", "d. La profundidad del corte"],
+                correct: 1
+            },
+            {
+                q: "¿Que es un divisor Universal (plato divisor), para que sirve?",
+                options: ["a. Para sujetar la pieza", "b. Para realizar divisiones angulares exactas para la elaboración de dientes de engranajes", "c. Para refrigerar la herramienta", "d. Para medir ángulos"],
+                correct: 1
+            },
+            {
+                q: "¿Un refrentado se puede realizar con el torno, también es posible con una fresadora?",
+                options: ["a. No, solo en torno", "b. Sí, similar a la planeadora para eliminar irregularidades en la cara principal", "c. No, se usa la mortajadora", "d. Sí, pero solo en fresadora vertical"],
+                correct: 1
+            },
+            {
+                q: "Con respecto a las cepilladoras que tipos de sistemas de transmisión conoce Ud? ¿Los cepillos de codo que sistema de transmisión tiene?",
+                options: ["a. Solo eléctrico", "b. Mecánico (piñón, plato manivela) e Hidráulico (fluidos, pistones)", "c. Neumático y eléctrico", "d. Solo manual"],
+                correct: 1
+            },
+            {
+                q: "Las fresas pueden ser sujetadas según mecanismos de sujeción al portafresa con herramientas como...",
+                options: ["a. Llaves y destornilladores", "b. Portafresas, portapinzas, tornillos de fijación, mandriles", "c. Bridas y gatos", "d. Prensa y mordaza"],
+                correct: 1
+            },
+            {
+                q: "El fresado de engranajes, se realiza en qué tipo de fresadoras mediante un dispositivo llamado...",
+                options: ["a. Fresadora vertical, mandril", "b. Fresadora universal o generadora, plato divisor", "c. Fresadora horizontal, brida", "d. Fresadora CNC, torno"],
+                correct: 1
+            },
+            {
+                q: "Cuando utilizamos una cepilladora?",
+                options: ["a. Para hacer agujeros", "b. Para mecanizar superficies planas extensas con excelente acabado", "c. Para roscar", "d. Para pulir"],
+                correct: 1
+            },
+            {
+                q: "Cuáles son las limitaciones operacionales en el uso de una cepilladora de codo",
+                options: ["a. No tiene limitaciones", "b. Menor capacidad en piezas grandes, menor productividad que fresadoras", "c. No puede cortar acero", "d. Solo trabaja en madera"],
+                correct: 1
+            },
+            {
+                q: "Dentro del criterio de evaluación de la maquinabilidad, qué criterio se considera? En función de...",
+                options: ["a. El color del material", "b. La duración de la herramienta, acabado superficial y capacidad de mecanizado", "c. El peso de la pieza", "d. La marca de la máquina"],
+                correct: 1
+            },
+            {
+                q: "En la relación de Taylor qué limitación existe?",
+                options: ["a. No tiene limitaciones", "b. Solo válida en un rango limitado de velocidades, no contempla todas las variables", "c. Solo aplica para acero", "d. Solo aplica en taladrado"],
+                correct: 1
+            },
+            {
+                q: "La carrera en VACIO, como se llama también en un cepillado?",
+                options: ["a. Carrera de corte", "b. Carrera de retorno", "c. Carrera de avance", "d. Carrera de penetración"],
+                correct: 1
+            },
+            {
+                q: "Cuales son los modos de sujeción de las piezas en una fresadora.",
+                options: ["a. Solo con las manos", "b. Mordazas, bridas, gatos, tornillos, ranuras en T", "c. Ventosas", "d. Electroimanes"],
+                correct: 1
+            },
+            {
+                q: "Para el fresado que tipo aceite de corte se utiliza?",
+                options: ["a. Aceite de oliva", "b. Aceite soluble o emulsiones refrigerantes", "c. Agua pura", "d. Aire comprimido"],
+                correct: 1
+            },
+            {
+                q: "El modo de dar ordenes a la maquina para que se los ejecute. Como se denomina a cada Orden",
+                options: ["a. Sentencia", "b. Bloque de Código CNC", "c. Línea de comando", "d. Instrucción simple"],
+                correct: 1
+            },
+            {
+                q: "Los comandos G son las órdenes mas utilizadas. Qué tipo de ordenes son?",
+                options: ["a. Órdenes misceláneas", "b. Órdenes geométricas", "c. Órdenes lógicas", "d. Órdenes de velocidad"],
+                correct: 1
+            },
+            {
+                q: "A que sistema se está refiriendo: Toma la información del diseño y genera la ruta de corte...",
+                options: ["a. CAD", "b. CAM (Computer Aided Manufacturing)", "c. CAE", "d. CNC"],
+                correct: 1
+            },
+            {
+                q: "Desde el punto de vista de la fabricación, esta situación que tipos de exigencias nos plantea? (Mayor gama de productos, menores plazos...)",
+                options: ["a. Fabricación en masa", "b. Personalización, menor tiempo de entrega, precios competitivos (Fabricación Flexible)", "c. Reducción de calidad", "d. Aumento de inventario"],
+                correct: 1
+            },
+            {
+                q: "Cual es el requisito para que las ondas ultrasónicas puedan propagarse",
+                options: ["a. El vacío", "b. Debe haber un medio, gaseoso, líquido o sólido", "c. Solo en metales", "d. Altas temperaturas"],
+                correct: 1
+            },
+            {
+                q: "Que función desempeña el MAGNETO ESTRICTOR? (en equipos de ultrasonido)",
+                options: ["a. Genera calor", "b. Transforma las oscilaciones eléctricas en vibraciones mecánicas", "c. Enfría la pieza", "d. Mide la vibración"],
+                correct: 1
+            },
+            // Preguntas de PC4 25-2
+            {
+                q: "¿Cuál es la limitación de trabajo de las fresadoras horizontales, y de que depende para solucionar este escollo?",
+                options: ["a. No puede cortar metal; se soluciona con sierra", "b. No puede mecanizar caras verticales; se soluciona con cabezal vertical o fresadora universal", "c. No gira; se soluciona con motor", "d. No tiene mesa; se soluciona con bancada"],
+                correct: 1
+            },
+            {
+                q: "Cuales son las características de las fresas de disco con diente cruzados",
+                options: ["a. Se usan para madera", "b. Evitan el roce lateral y permiten mayores avances", "c. Tienen un solo diente", "d. Son para interiores"],
+                correct: 1
+            },
+            // Preguntas de Final 25-1
+            {
+                q: "En un proceso de fresado, defina: El Avance por diente",
+                options: ["a. El avance de la mesa por minuto", "b. Desplazamiento de la obra cuando el diente anterior ocupa el mismo lugar del diente posterior inmediato", "c. La velocidad de giro de la fresa", "d. La profundidad de corte"],
+                correct: 1
+            },
+            {
+                q: "En una Fresadora se puede mecanizar engranajes? Explique",
+                options: ["a. No se puede", "b. Si, pero con el plato divisor", "c. Solo con CNC", "d. Solo en fresadora vertical"],
+                correct: 1
+            }
+        ];
+
+        let currentQuestions = [];
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function startQuiz() {
+            document.getElementById('quiz-intro').style.display = 'none';
+            document.getElementById('quiz-wrapper').style.display = 'block';
+            generateQuiz();
+        }
+
+        function generateQuiz() {
+            let shuffled = [...questionBank];
+            shuffleArray(shuffled);
+            currentQuestions = shuffled.slice(0, 10);
+
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = '';
+
+            currentQuestions.forEach((q, index) => {
+                let optionsHtml = '';
+                q.options.forEach((opt, i) => {
+                    optionsHtml += `
+                        <div class="quiz-option" onclick="selectOption(this, ${index}, ${i})">
+                            <input type="radio" name="q${index}" value="${i}" id="q${index}_opt${i}">
+                            <label for="q${index}_opt${i}">${opt}</label>
+                        </div>
+                    `;
+                });
+
+                container.innerHTML += `
+                    <div class="quiz-question" id="question-${index}">
+                        <h4>${index + 1}. ${q.q}</h4>
+                        <div class="quiz-options" id="options-${index}">
+                            ${optionsHtml}
+                        </div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('results-wrapper').style.display = 'none';
+        }
+
+        function selectOption(el, qIndex, optIndex) {
+            const parent = document.getElementById(`options-${qIndex}`);
+            parent.querySelectorAll('.quiz-option').forEach(div => {
+                div.classList.remove('selected');
+                div.querySelector('input').checked = false;
+            });
+            el.classList.add('selected');
+            el.querySelector('input').checked = true;
+        }
+
+        function submitQuiz() {
+            let score = 0;
+            let errors = [];
+
+            currentQuestions.forEach((q, index) => {
+                const selectedInput = document.querySelector(`input[name="q${index}"]:checked`);
+                const optionsDivs = document.getElementById(`options-${index}`).querySelectorAll('.quiz-option');
+                
+                optionsDivs.forEach((div, i) => {
+                    if (i === q.correct) {
+                        div.classList.add('correct');
+                    }
+                });
+
+                if (selectedInput) {
+                    const selectedValue = parseInt(selectedInput.value);
+                    if (selectedValue === q.correct) {
+                        score++;
+                    } else {
+                        optionsDivs[selectedValue].classList.add('incorrect');
+                        errors.push({
+                            question: q.q,
+                            correctAnswer: q.options[q.correct]
+                        });
+                    }
+                } else {
+                    errors.push({
+                        question: q.q,
+                        correctAnswer: q.options[q.correct]
+                    });
+                }
+            });
+
+            document.getElementById('quiz-wrapper').style.display = 'none';
+            document.getElementById('results-wrapper').style.display = 'block';
+            document.getElementById('score-display').innerText = `${score} / 10`;
+
+            const errorContainer = document.getElementById('error-container');
+            errorContainer.innerHTML = '';
+
+            if (errors.length > 0) {
+                errorContainer.innerHTML = '<h3 style="color: var(--accent-red); margin-bottom: 16px;"><i class="fas fa-exclamation-triangle"></i> Revisión de Errores</h3>';
+                errors.forEach(err => {
+                    errorContainer.innerHTML += `
+                        <div class="error-item">
+                            <div class="error-q">${err.question}</div>
+                            <div class="error-a">Respuesta correcta: <strong>${err.correctAnswer}</strong></div>
+                        </div>
+                    `;
+                });
+            } else {
+                errorContainer.innerHTML = '<h3 style="color: var(--accent-green); text-align: center;"><i class="fas fa-check-circle"></i> ¡Perfecto! Has acertado todas las preguntas.</h3>';
+            }
+        }
+
+        function resetQuiz() {
+            document.getElementById('quiz-intro').style.display = 'block';
+            document.getElementById('quiz-wrapper').style.display = 'none';
+            document.getElementById('results-wrapper').style.display = 'none';
+        }
+
+    </script>
+</body>
+</html>
